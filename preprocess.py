@@ -1,6 +1,7 @@
 import rasterio
 import numpy as np
 import torch
+from torchvision.utils import save_image
 
 # DEMファイルを読み込み（例: GeoTIFF）
 dem_path = "center_tile.tif"
@@ -22,6 +23,8 @@ tensor_rgb = tensor.repeat(1, 3, 1, 1)
 
 print("Input tensor shape:", tensor_rgb.shape)
 print("Value range:", tensor_rgb.min().item(), tensor_rgb.max().item())
+
+save_image(tensor_rgb, "/home/s1300211/Documents/datasets/SR_testing_datasets_crop_x4/Set5_LRx4/dem_tensor_rgb.png")
 
 # これをSROOEモデルに入力可能
 # 例: output = srooe_model(tensor_rgb)
