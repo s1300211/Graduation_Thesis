@@ -3,35 +3,50 @@ from rasterio.transform import from_origin
 from PIL import Image
 import numpy as np
 
-# PNG画像を読み込み
-png_path = "dem_tensor_rgb.png"
-img = Image.open(png_path).convert("L")  # グレースケールに変換
-dem_array = np.array(img).astype(np.float32)
+# ---- パス設定 ----
+png_path = "dem_tensor_rgb.png"          # 復元元PNG
+original_dem_path = "center_tile.tif"   # 元DEM
+output_tif_path = "restored_dem.tif"     # 出力ファイル
 
-# 値域を0〜1に戻す（PNGは0〜255に量子化されているため）
-dem_array = dem_array / 255.0
+# ---- 元DEMを読み込む ----
+with rasterio.open(original_dem_path) as src:
+    original_dem = src.read(1).astype(np.float32)
+    dem_min = np.nanmin(original_dem)
+    dem_max = np.nanmax(original_dem)
+    original_transform = src.transform
+    original_crs = src.crs
+    height = src.height
+    width = src.width
 
-# ここで必要なら元のDEMのmin/maxを使ってスケーリングを復元
-# 例: dem_array = dem_array * (dem_max - dem_min) + dem_min
+print("Original DEM min/max:", dem_min, dem_max)
 
-# GeoTIFFとして保存
-tif_path = "restored_dem.tif"
-height, width = dem_array.shape
+# ---- PNG を読み込む（グレースケール前提）----
+img = Image.open(png_path).convert("L")
+png_array = np.array(img).astype(np.float32)
 
-# 仮の座標系・解像度（元DEMの情報がある場合はそれを使う）
-transform = from_origin(0, 0, 1, 1)  # 左上座標(0,0)、ピクセルサイズ(1,1)
+# サイズチェック（違っていたらエラー）
+if png_array.shape != (height, width):
+    raise ValueError("PNG と元DEMのサイズが一致していません！")
 
+# ---- 0〜1 に戻す（255量子化されていた前提）----
+norm = png_array / 255.0
+
+# ---- 元DEMのスケールに復元 ----
+restored_dem = norm * (dem_max - dem_min) + dem_min
+
+# ---- GeoTIFF として保存（元DEMのCRS/transformを引き継ぐ）----
 with rasterio.open(
-    tif_path,
+    output_tif_path,
     "w",
     driver="GTiff",
     height=height,
     width=width,
     count=1,
-    dtype=dem_array.dtype,
-    crs="EPSG:4326",  # 仮の座標系（元DEMのCRSを使うべき）
-    transform=transform,
+    dtype=restored_dem.dtype,
+    crs=original_crs,
+    transform=original_transform,
 ) as dst:
-    dst.write(dem_array, 1)
+    dst.write(restored_dem, 1)
 
-print("GeoTIFF DEM saved:", tif_path)
+print("Restored DEM saved:", output_tif_path)
+
