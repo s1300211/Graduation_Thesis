@@ -66,7 +66,7 @@ def display_dem(file_path):
 
 # --- 実行例 ---
 # 実際に表示したいDEMファイルへのパスを指定してください
-dem_file_path = '/home/s1300211/Documents/NAC_DTM_2000_Filled_Inpaint.tif' 
+dem_file_path = 'gene_test_imge.tif' 
 
 display_dem(dem_file_path)
 # 上記のコメントを外して実行してください。
