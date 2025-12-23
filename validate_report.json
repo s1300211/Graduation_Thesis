@@ -1,0 +1,17 @@
+{
+  "n_valid": 1287360400,
+  "n_total": 1600000000,
+  "valid_ratio": 0.80460025,
+  "mae_m": 0.5245967622397351,
+  "rmse_elev_m": 0.7536709264441098,
+  "bias_m": 0.47205388831299216,
+  "re_lt_10m": 0.9999969876345427,
+  "psnr_db": 79.47370535980372,
+  "mutual_information": 4.714820721791911,
+  "rmse_slope_deg": 3.6020206895296085,
+  "ref_path": "/home/s1300211/Documents/ldem_87s_5mpp.tif",
+  "sr_path": "/home/s1300211/data/full_2m_sr.tif",
+  "window": 2048,
+  "stride": 2048,
+  "resampling": "average (WarpedVRT to ref grid)"
+}
