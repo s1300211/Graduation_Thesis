@@ -11,3 +11,5 @@ PYTHONPATH=. python moon_data/infer_full_5m_to_2m_tiled.py \
   --save_dir /tmp \
   --stride 8
 
+epoch-259_loss-0.0003.pth (fixA)
+epoch-258_loss-0.0010.pth (fixB)
