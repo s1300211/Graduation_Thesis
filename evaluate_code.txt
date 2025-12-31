@@ -6,7 +6,8 @@ cd ~/Documents/EBCF-CDEM
 PYTHONPATH=. python moon_data/infer_full_5m_to_2m_tiled.py \
   --lr5_tif /home/s1300211/Documents/datasets/test/center_tile.tif \
   --out_tif /home/s1300211/Documents/EBCF-CDEM/moon_data/out_center_tile_2m_v5.tif \
-  --model_pth /home/s1300211/Programs/Experiments/EBCF-CDEM/moon_edsrB-ebcf-nearest-pe16/runner.train.v1/epoch-112_loss-0.0012.pth \
+  --model_pth /home/s1300211/Programs/Experiments/EBCF-CDEM/moon_edsrB-ebcf-nearest-pe16/runner.train.v1/epoch-268_loss-0.0003.pth \
   --device cuda:0 \
   --save_dir /tmp \
   --stride 8
+
